@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>User Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <form id="user-form">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required><br><br>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required><br><br>
+
+      <label for="phone">Phone:</label>
+      <input type="tel" id="phone" name="phone" required><br><br>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <script>
+      // Handle form submission
+      $('#user-form').submit(function(event) {
+        event.preventDefault();
+
+        const name = $('#name').val();
+        const email = $('#email').val();
+        const phone = $('#phone').val();
+
+        // Make GET request to check if user exists
+        $.ajax({
+          type: 'GET',
+          url: 'https://example.com/api/users',
+          data: {email: email},
+          success: function(response) {
+            // If user exists, show alert
+            alert('User Found');
+          },
+          error: function(xhr, status, error) {
+            // If user doesn't exist, create new user
+            $.ajax({
+              type: 'POST',
+              url: 'https://example.com/api/users',
+              data: {name: name, email: email, phone: phone},
+              success: function(response) {
+                // Show success message
+                alert('User Created Successfully');
+              },
+              error: function(xhr, status, error) {
+                // Show error message
+                alert('Error: ' + error);
+              }
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
